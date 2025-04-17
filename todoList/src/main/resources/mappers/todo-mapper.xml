@@ -10,10 +10,44 @@
    -->
    
    <!--  태그로 SQL 구문 작성 -->
-   
-   
-   <select id="" resultType="Todo"></select>
+  	<select id="testTitle" resultType="string">
+  		SELECT TODO_TITLE FROM TB_TODO
+  		WHERE TODO_NO = 1
+  	</select>
  
+   <!-- 
+   		<select> 태그 속성
+   		
+   		- id 속성 : 태그를 식별하는 값
+   		(연결된 Mapper의 메서드명과 동일하게 작성하여 연결)
+   		
+   		- resultType : 조회 결과 한줄(1행)을 저장하여
+   						반환할 변수/객체 자료형 지정
+   						
+   						조회 결과가 여러행이면
+   						행 별로 변수/객체 자료형으로 저장 후
+   						모아서 List 로 반환
+   
+   
+    -->
+   
+   <!-- 할 일 목록 조회 -->
+   <select id="selectAll" resultType="Todo">
+  	SELECT TODO_NO, TODO_TITLE, COMPLETE,
+	TO_CHAR(REG_DATE, 'YYYY-MM-DD HH24:MI:SS') REG_DATE
+	FROM TB_TODO
+	ORDER BY TODO_NO
+   </select>
+   
+   <!-- 완료된 할 일 개수 조회 -->
+   <select id="getCompleteCount" resultType="_int">
+   	SELECT COUNT(*) 
+	FROM TB_TODO
+	WHERE COMPLETE = 'Y'
+   </select>
+   
+   
+   
    
    
 </mapper>

@@ -1,6 +1,10 @@
 package edu.kh.todo.model.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+
+import edu.kh.todo.model.dto.Todo;
 
 
 /*
@@ -21,9 +25,18 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface TodoMapper {
-	
+
 	// Mapper의 메서드명 == mapper.xml 파일 내 태그의 id
 	// -> 메서드명과 sql구문중 id가 같은 태그가 서로 연결된다!
+	
+	String testTitle();
+
+	List<Todo> selectAll();
+
+	int getCompleteCount();
+	
+	
+	
 	
 	
 	
