@@ -86,32 +86,49 @@ public class DBConfig {
 	// 데이터베이스와 같은 저장소에 영구적으로 저장하고, 
 	// 이를 쉽게 CRUD 할 수 있도록 도와주는 프레임워크.
 	
-	
 	//SqlSessionFactory : SqlSession을 만드는 객체
 	@Bean
 	public SqlSessionFactory sessionFactory(DataSource dataSource) throws Exception{
+					// 매개변수로 DataSource를 받아와 DB 연결 정보를 사용할 수 있도록 함
 		
+		// MyBatis의 SqlSession을 생성하는 역할을 할 객체를 생성
 		SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
 		
+		// sessionFactoryBean이름의 공장에 MyBatis를 이용하기 위한 각종 세팅을 함..
+		
 		sessionFactoryBean.setDataSource(dataSource);
+		
+		// 세팅1. mapper.xml(SQL 작성해둘 파일) 파일이 모이는 경로를 지정
+		// -> Mybatis 코드 수행 시 xxx-mapper.xml 을 읽을 수 있음
 		//매퍼 파일이 모여있는 경로 지정
 		sessionFactoryBean
 		.setMapperLocations(applicationContext.getResources("classpath:/mappers/**.xml"));
+				// 현재프로젝트.자원을얻겠다.src/main/resources/mappers/ 하위의 모든 .xml 파일
+		
+		
+		// 세팅2. 해당 패키지 내 모든 클래스의 별칭을 등록
+		// -> Mybatis는 특정 클래스 지정 시 패키지명.클래스명까지 모두 작성해야함.
+		// -> 긴 이름을 짧게 부를 수 있도록 별칭 설정할 수 있음.
 		
 		//별칭을 지정해야하는 DTO가 모여있는 패키지 지정
 		//-> 해당 패키지에 있는 모든 클래스가 클래스명으로 별칭이 지정됨
 		sessionFactoryBean.setTypeAliasesPackage("edu.kh.todo");
+		// -> edu.kh.todo 세팅 시 패키지 하위에있는 모든 클래스가 
+		//	 클래스명으로 별칭이 지정됨.
+		// -> ex) edu.kh.todo.model.dto.Todo -> Todo (별칭 등록)
 		
-		
-		//마이바티스 설정 파일 경로 지정
+		// 세팅3. 마이바티스 설정 파일 경로 지정
 		sessionFactoryBean
 		.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
+		// mybatis-config.xml의 내용을 읽어들임
+		// -> jdbcTypeForNull / mapUnderscoreToCamelCase 를 적용함
 		
 		//SqlSession 객체 반환
 		return sessionFactoryBean.getObject();
 	}
 
 	//SqlSessionTemplate : 기본 SQL 실행 + 트랜잭션 처리
+	// Connection + DBCP + Mybatis + 트랜잭션 처리
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sessionFactory) {
 		return new SqlSessionTemplate(sessionFactory);
