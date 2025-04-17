@@ -34,6 +34,10 @@ public interface TodoMapper {
 	List<Todo> selectAll();
 
 	int getCompleteCount();
+
+	int addTodo(Todo todo);
+
+	Todo todoDetail(int todoNo);
 	
 	
 	

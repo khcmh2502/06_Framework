@@ -50,10 +50,25 @@ public class TodoServiceImpl implements TodoService{
 		map.put("completeCount", completeCount);
 		
 		return map;
+	}
+
+	@Override
+	public int addTodo(String todoTitle, String todoContent) {
+		
+		// 마이바티스에서 SQL에 전달할 수 있는 파라미터 개수는 오직 1개!!!
+		// -> todoTitle, todoContent 여러개인 파라미터를 전달하려면 
+		//    Todo DTO로 묶어서 전달하면 된다!
+		Todo todo = new Todo();
+		todo.setTodoTitle(todoTitle);
+		todo.setTodoContent(todoContent);
+		
+		return mapper.addTodo(todo);
 	} 
 	
-	
-	
+	@Override
+	public Todo todoDetail(int todoNo) {
+		return mapper.todoDetail(todoNo);
+	}
 	
 	
 	

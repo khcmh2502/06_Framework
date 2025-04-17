@@ -1,12 +1,14 @@
 package edu.kh.todo.model.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data // Getter + Setter + ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Todo {
 	private int todoNo; 		// 할 일 번호
 	private String todoTitle; 	// 할 일 제목
