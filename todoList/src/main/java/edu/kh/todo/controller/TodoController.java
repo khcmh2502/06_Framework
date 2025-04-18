@@ -153,6 +153,29 @@ public class TodoController {
 		return path;
 	}
 	
+	@GetMapping("delete")
+	public String todoDelete(@RequestParam("todoNo") int todoNo,
+							RedirectAttributes ra) {
+		
+		
+		int result = service.todoDelete(todoNo);
+		
+		String path = null;
+		String message = null;
+		
+		if(result > 0) {
+			path = "/";
+			message = "삭제 성공";
+		} else {
+			path = "/todo/detail?todoNo=" + todoNo;
+			message = "삭제 실패";
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:" + path;
+		
+	}
 	
 	
 	

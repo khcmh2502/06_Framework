@@ -37,3 +37,15 @@ updateBtn.addEventListener("click", e => {
 
   location.href = `/todo/update?todoNo=${todoNo}`;
 });
+
+
+// --------------------------------------------
+
+// 삭제 버튼 클릭 시 동작
+const deleteBtn = document.querySelector("#deleteBtn");
+deleteBtn.addEventListener("click", e => {
+
+  if(confirm("삭제하시겠습니까?")) {
+    location.href = `/todo/delete?todoNo=${e.target.dataset.todoNo}`;
+  }
+});
