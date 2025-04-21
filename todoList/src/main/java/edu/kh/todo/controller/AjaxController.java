@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.kh.todo.model.dto.Todo;
@@ -119,7 +120,14 @@ public class AjaxController {
 	}
 	
 	
-	
+	// 할 일 상세 조회
+	@ResponseBody		// 비동기 요청을 보낸곳으로 데이터(반환값) 돌려보냄
+	@GetMapping("detail")
+	public Todo selectTodo(@RequestParam("todoNo") int todoNo) {
+		return service.todoDetail(todoNo);
+		// return 자료형 : Todo(dto)
+		// -> HttpMessageConvertor 가 String(JSON) 형태로 변환해서 반환
+	}
 	
 	
 	
