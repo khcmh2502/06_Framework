@@ -125,9 +125,59 @@ sendAuthKeyBtn.addEventListener("click", () => {
 
   // ****************************************
   // 비동기로 서버에서 메일 보내기
+  fetch("/email/signup", {
+    method: "POST",
+    headers : {"Content-Type" : "application/json"},
+    body : memberEmail.value
+  })
+  .then(resp => resp.text())
+  .then(result => {
+    if(result == 1) {
+      console.log("인증 번호 발송 성공");
+    } else {
+      console.log("인증 번호 발송 실패!!!...");
+    }
+  });
 
   // ****************************************
   // 메일은 비동기로 서버에서 보내라고 놔두고
   // 화면에서는 타이머 시작하기
+  authKeyMessage.innerText = initTime; // 05:00 세팅
+  authKeyMessage.classList.remove("confirm", "error"); // 검정 글씨색
+  
+  alert("인증번호가 발송되었습니다.");
+  
+  // setInterval(콜백함수, 지연시간(ms))
+  // - 지연시간(ms)만큼 시간이 지날때마다 콜백함수 수행
+
+  // 인증 가능 시간 출력(1초 마다 동작)
+  authTimer = setInterval(() => {
+
+    authKeyMessage.innerText = `${addZero(min)}:${addZero(sec)}`;
+
+    // 0분 0초인 경우 ("00:00 출력 후")
+    if(min == 0 && sec == 0) {
+      checkObj.authKey = false; // 인증 못함
+      clearInterval(authTimer); // interval 멈춤
+      authKeyMessage.classList.add('error'); 
+      authKeyMessage.classList.remove('confirm');
+      return;
+    } 
+
+    // 0초인 경우(0초를 출력한 후)
+    if(sec == 0) {
+      sec = 60;
+      min--;
+    }
+
+    sec--; // 1초 감소
+
+  }, 1000); // 1초 지연시간
 
 });
+
+// 매개변수 전달받은 숫자가 10 미만인 경우(한자리) 앞에 0 붙여서 반환
+function addZero(number) {
+  if(number < 10) return "0" + number;
+  else            return number;
+}
