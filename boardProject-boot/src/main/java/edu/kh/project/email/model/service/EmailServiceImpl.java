@@ -9,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import edu.kh.project.email.model.mapper.EmailMapper;
 import jakarta.mail.MessagingException;
@@ -23,9 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailServiceImpl implements EmailService{
 	
 	private final EmailMapper mapper;
-	private final JavaMailSender mailSender;
-	// JavaMailSender : 실제 메일 발송을 담당하는 객체(EmailConfig 설정이 적용된 객체)
-
+	private final JavaMailSender mailSender;// JavaMailSender : 실제 메일 발송을 담당하는 객체(EmailConfig 설정이 적용된 객체)
+	private final SpringTemplateEngine templateEngine;
+	// SpringTemplateEngine : 타임리프를 이용해서 html 코드 -> java 코드 변환
+	
 	@Override
 	public String sendEmail(String htmlName, String email) {
 		
@@ -77,8 +80,14 @@ public class EmailServiceImpl implements EmailService{
 	
 	// HTML 템플릿에 데이터를 바인딩하여 최종 HTML 생성 메서드
 	private String loadHtml(String authKey, String htmlName) {
+		// Context : 타임리프에서 제공하는 HTML 템플릿에 데이터를 
+		//			전달하기 위해 사용하는 클래스
 		
-		return null;
+		Context context = new Context(); // 템플릿에 바인딩할 데이터를 담는 상자
+		context.setVariable("authKey", authKey); // 템플릿에서 사용할 변수 authKey에 값 설정
+		
+		return templateEngine.process("email/" + htmlName, context);
+		// templates/email/signup.html
 	}
 
 	// 인증키와 이메일을 DB에 저장하는 메서드
