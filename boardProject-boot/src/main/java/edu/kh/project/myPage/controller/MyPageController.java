@@ -103,6 +103,32 @@ public class MyPageController {
 		// 회원 정보 수정 서비스 호출
 		int result = service.updateInfo(inputMember, memberAddress);
 		
+		String message = null;
+		
+		if(result > 0) { // 회원 정보 수정 성공
+			
+			// loginMember 새로 세팅
+			// 우리가 방금 바꾼 값으로 세팅
+			
+			// loginMember는 세션에 저장된 로그인한 회원 정보가 
+			// 저장된 객체를 참조하고있다!
+			
+			// -> loginMember를 수정하면
+			//    세션에 저장된 로그인한 회원 정보가 수정된다
+			// == 세션 데이터와 DB 데이터를 동기화
+			
+			loginMember.setMemberNickname( inputMember.getMemberNickname() );
+			loginMember.setMemberTel( inputMember.getMemberTel() );
+			loginMember.setMemberAddress( inputMember.getMemberAddress() );
+			
+			message = "회원 정보 수정 성공!!";
+			
+		} else {
+			
+			message = "회원 정보 수정 실패..";
+		}
+		
+		ra.addFlashAttribute("message", message);
 		
 		return "redirect:info";
 	}
