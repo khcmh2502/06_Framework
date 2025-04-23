@@ -168,11 +168,24 @@ public class MemberController {
 		// 회원가입 서비스 호출
 		int result = service.signup(inputMember, memberAddress);
 		
+		String path = null;
+		String message = null;
 		
+		if(result > 0) {  // 성공 시
+			message = inputMember.getMemberNickname() + "님의 가입을 환영합니다!";	
+			path = "/";
+			
+		} else { // 실패
+			message = "회원 가입 실패..";
+			path = "signup";
+		}
 		
+		ra.addFlashAttribute("message", message);
 		
-		
-		return "redirect:";
+		return "redirect:" + path;
+		// 성공 -> redirect:/
+		// 실패 -> redirect:signup (상대경로)
+		//		현재 주소 /member/signup (GET 방식 요청)
 	}
 	
 	
