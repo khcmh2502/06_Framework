@@ -21,8 +21,13 @@
    	AND MEMBER_DEL_FL = 'N'
    </select>
    
-   
-   
+   <!-- 닉네임 중복 검사 -->
+   <select id="checkNickname">
+   	SELECT COUNT(*)
+   	FROM "MEMBER"
+   	WHERE MEMBER_NICKNAME = #{memberNickname}
+   	AND MEMBER_DEL_FL = 'N'
+   </select>
    
    
    

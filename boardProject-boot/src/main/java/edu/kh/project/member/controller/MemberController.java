@@ -1,5 +1,7 @@
 package edu.kh.project.member.controller;
 
+import java.sql.Array;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -137,6 +139,41 @@ public class MemberController {
 		return service.checkEmail(memberEmail);
 	}
 	
+	/** 닉네임 중복 검사
+	 * @param memberNickname
+	 * @return 중복 1, 아님 0
+	 */
+	@ResponseBody
+	@GetMapping("checkNickname")
+	public int checkNickname(@RequestParam("memberNickname") String memberNickname) {
+		return service.checkNickname(memberNickname);
+	}
+	
+	/** 회원가입
+	 * @param inputMember : 입력된 회원 정보(memberEmail, memberPw, memberNickname, memberTel, 
+	 * 						memberAddress(따로 배열로 받아 처리)
+	 * @param memberAddress : 입력한 주소 input 3개의 값을 배열로 전달 [우편번호, 도로명/지번주소, 상세주소]
+	 * @param ra : 리다이렉트 시 request -> session -> request 로 데이터 전달하는 객체
+	 * @return
+	 */
+	@PostMapping("signup")
+	public String signup(Member inputMember, 
+						@RequestParam("memberAddress") String[] memberAddress,
+						RedirectAttributes ra
+			) {
+		
+		//log.debug("inputMember: " + inputMember);
+		//log.debug("memberAddress: " + memberAddress.toString());
+		
+		// 회원가입 서비스 호출
+		int result = service.signup(inputMember, memberAddress);
+		
+		
+		
+		
+		
+		return "redirect:";
+	}
 	
 	
 	
