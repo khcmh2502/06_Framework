@@ -38,8 +38,11 @@
 
             <input type="text" name="memberNickname" 
               maxlength="10" id="memberNickname"
-              th:value="${session.loginMember.memberNickname}"
-              >
+              th:value="${session.loginMember.memberNickname}">
+
+              <!-- 기존 닉네임을 저장해둘 hidden 타입 input 태그 -->
+            <input type="hidden" id="currentNickname" 
+            th:value="${session.loginMember.memberNickname}">
           </div>
 
 

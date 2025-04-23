@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
 import edu.kh.project.myPage.model.service.MyPageService;
@@ -79,6 +82,30 @@ public class MyPageController {
 	}
 	
 	
+	/** 회원 정보 수정
+	 * @param inputMember : 커맨드 객체(@ModelAttribute가 생략된 상태) 
+	 * 						제출된 수정된 회원 닉네임, 전화번호, 주소
+	 * @param loginMember : 로그인한 회원 정보 (회원 번호 사용할 예정)
+	 * @param memberAddress : 주소만 따로 받은 String[] 구분자 ^^^ 변경 예정
+	 * @param ra	: 
+	 * @return
+	 */
+	@PostMapping("info")
+	public String updateInfo(Member inputMember,
+							@SessionAttribute("loginMember") Member loginMember,
+							@RequestParam("memberAddress") String[] memberAddress,
+							RedirectAttributes ra) {
+		
+		// inputMember에 로그인한 회원 번호 추가
+		inputMember.setMemberNo(loginMember.getMemberNo());
+		// inputMember : 회원 번호, 회원 닉네임, 전화번호, 주소
+		
+		// 회원 정보 수정 서비스 호출
+		int result = service.updateInfo(inputMember, memberAddress);
+		
+		
+		return "redirect:info";
+	}
 	
 	
 	

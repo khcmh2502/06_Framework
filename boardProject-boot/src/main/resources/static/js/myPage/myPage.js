@@ -5,7 +5,10 @@ const updateInfo = document.querySelector("#updateInfo"); // form 태그
 if (updateInfo != null) {
 
   // form 제출 시
-  updateInfo.addEventListener("submit", e => {
+  updateInfo.addEventListener("submit", async e => {
+
+    // 가장 먼저 기본 이벤트 동작 중단
+    e.preventDefault();
 
     const memberNickname = document.querySelector("#memberNickname");
     const memberTel = document.querySelector("#memberTel");
@@ -14,7 +17,7 @@ if (updateInfo != null) {
     // 닉네임 유효성 검사
     if (memberNickname.value.trim().length === 0) {
       alert("닉네임을 입력해주세요");
-      e.preventDefault(); // 제출 막기
+      //e.preventDefault(); // 제출 막기
       return;
     }
 
@@ -22,17 +25,38 @@ if (updateInfo != null) {
     let regExp = /^[가-힣\w\d]{2,10}$/;
     if (!regExp.test(memberNickname.value)) {
       alert("닉네임이 유효하지 않습니다.");
-      e.preventDefault(); // 제출 막기
+      //e.preventDefault(); // 제출 막기
       return;
     }
 
-    // *********** 닉네임 중복검사는 개별적으로 해보기 ***********
-    // ***********************************************************
+    // 기존 닉네임이 저장되어있는 요소의 value값 얻어오기
+    const currentNickname = document.querySelector("#currentNickname").value;
+
+    // 기존 닉네임과 새로 입력된 닉네임이 다르면 중복검사 시도하기
+    // -> 같으면 변경된 적 없다 -> 중복검사 진행 안함
+    if(currentNickname !== memberNickname.value) {
+
+      // 비동기 요청 (fetch() API 이용)
+      // async / await 사용
+      // async : 비동기 함수를 만들 때 사용되는 키워드 ("이 함수 내에는 시간이 걸리는 작업이 있다!")
+      // await : 비동기 작업의 결과를 기다릴 때 사용 키워드 
+      //   -> !!!반드시 async 함수 안에서만 사용 가능!!!
+      //   -> "이 작업이 끝날때까지 기다려주세요"
+      const resp = await fetch("/member/checkNickname?memberNickname=" + memberNickname.value);
+      const count = await resp.text();
+
+      if(count == 1) {
+        alert("이미 사용중인 닉네임입니다!");
+        //e.preventDefault();
+        return;
+      }
+    }
+
 
     // 전화번호 유효성 검사
     if (memberTel.value.trim().length === 0) {
       alert("전화번호를 입력해 주세요");
-      e.preventDefault();
+      //e.preventDefault();
       return;
     }
 
@@ -40,7 +64,7 @@ if (updateInfo != null) {
     regExp = /^01[0-9]{1}[0-9]{3,4}[0-9]{4}$/;
     if (!regExp.test(memberTel.value)) {
       alert("전화번호가 유효하지 않습니다");
-      e.preventDefault();
+      //e.preventDefault();
       return;
     }
 
@@ -62,8 +86,20 @@ if (updateInfo != null) {
     // 모두 입력 또는 모두 미입력이 아니면
     if (!(result1 || result2)) {
       alert("주소를 모두 작성 또는 미작성 해주세요");
-      e.preventDefault();
+      //e.preventDefault();
+      return;
     }
+
+    // 위의 모든 검증을 통과했을 때만 폼 제출
+    updateInfo.submit();
+
+    /*
+    submit 이벤트 핸들러 함수 내에서 fetch를 이용한 비동기 함수를 실행중 일 때
+    e.preventDefault()가 비동기 함수 이후에 호출되면 이미 form 이 
+    submit되어버린 다음일 수 있음.
+    -> 비동기 작업 중에 form 의 기본 제출 동작 일어나는 가능성이 생김!
+    */
+
   });
 }
 
