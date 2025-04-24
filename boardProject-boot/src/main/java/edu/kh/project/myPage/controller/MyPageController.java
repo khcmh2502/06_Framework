@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
@@ -218,8 +219,26 @@ public class MyPageController {
 		return "redirect:" + path;
 	}
 	
-	
-	
+	/* Spring에서 파일 업로드를 처리하는 방법
+	 * 
+	 * - encType = "multipart/form-data"로 클라이언트 요청을 받으면
+	 *    (문자, 숫자, 파일 등이 섞여있는 요청)
+	 *    
+	 *   이를 MultipartResolver(FileConfig에 정의)를 이용해서 섞여있는 파라미터를 분리
+	 *   
+	 *   문자열, 숫자 -> String
+	 *   파일		  -> MultipartFile
+	 * 
+	 * */
+	@PostMapping("file/test1")  // /myPage/file/test1  POST 요청 매핑
+	public String fileUpload1(@RequestParam("uploadFile") MultipartFile uploadFile) {
+		
+		String path = service.fileUpload1(uploadFile);
+		// 웹에서 접근할 수 있는 경로를 반환
+		
+		
+		return "redirect:/myPage/fileTest";
+	}
 	
 	
 	
