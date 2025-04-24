@@ -1,5 +1,6 @@
 package edu.kh.project.myPage.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
+import edu.kh.project.myPage.model.dto.UploadFile;
 import edu.kh.project.myPage.model.service.MyPageService;
 
 /*
@@ -231,14 +233,74 @@ public class MyPageController {
 	 * 
 	 * */
 	@PostMapping("file/test1")  // /myPage/file/test1  POST 요청 매핑
-	public String fileUpload1(@RequestParam("uploadFile") MultipartFile uploadFile) {
+	public String fileUpload1(@RequestParam("uploadFile") MultipartFile uploadFile,
+							RedirectAttributes ra) throws Exception {
 		
 		String path = service.fileUpload1(uploadFile);
 		// 웹에서 접근할 수 있는 경로를 반환
+		// path = /myPage/file/A.jpg
+		
+		// 파일이 저장되어 웹에서 접근할 수 있는 경로가 반환되었을 때
+		if( path != null ) {
+			ra.addFlashAttribute("path", path);
+		}
 		
 		
 		return "redirect:/myPage/fileTest";
 	}
+	
+	/** 업로드한 파일 DB 저장 + 서버 저장 + 조회
+	 * @param uploadFile
+	 * @param loginMember
+	 * @param ra
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("file/test2")
+	public String fileUpload2(@RequestParam("uploadFile") MultipartFile uploadFile,
+							@SessionAttribute("loginMember") Member loginMember,
+							RedirectAttributes ra) throws Exception {
+		
+		// 로그인한 회원의 번호 얻어오기(누가 업로드 했는가)
+		int memberNo = loginMember.getMemberNo();
+		
+		// 업로드디된 파일 정보를 DB에 INSERT 후 결과 행의 개수 반환받기
+		int result = service.fileUpload2(uploadFile, memberNo);
+		
+		String message = null;
+		
+		if(result > 0) {
+			message = "파일 업로드 성공";
+		} else {
+			message = "파일 업로드 실패..";
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:/myPage/fileTest";
+	}
+	
+	
+	/** 파일 목록 조회 화면 이동
+	 * @param model
+	 * @param loginMember : 현재 로그인한 회원의 번호가 필요! 
+	 * @return
+	 */
+	@GetMapping("fileList")
+	public String fileList(Model model, 
+						@SessionAttribute("loginMember") Member loginMember) {
+		
+		// 파일 목록 조회 서비스 호출 (현재 로그인한 회원이 올린 이미지만 조회)
+		int memberNo = loginMember.getMemberNo();
+		List<UploadFile> list = service.fileList(memberNo);
+		
+		// model 에 list 담아서 forward
+		model.addAttribute("list", list);
+		
+		return "myPage/myPage-fileList";
+	}
+	
+	
 	
 	
 	
