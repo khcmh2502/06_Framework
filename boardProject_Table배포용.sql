@@ -131,6 +131,22 @@ SELECT * FROM "UPLOAD_FILE";
 
 -- 4/24 수행완료
 
+SELECT FILE_NO, FILE_PATH, FILE_ORIGINAL_NAME, FILE_RENAME,
+MEMBER_NICKNAME, 
+TO_CHAR(FILE_UPLOAD_DATE, 'YYYY-MM-DD') FILE_UPLOAD_DATE
+FROM "UPLOAD_FILE"
+JOIN "MEMBER" ON ("UPLOAD_FILE".MEMBER_NO = "MEMBER".MEMBER_NO)
+WHERE "UPLOAD_FILE".MEMBER_NO = 2
+ORDER BY FILE_NO DESC;
+
+
+
+
+
+
+
+
+
 ------------------------------------------
 
 /* 게시판 테이블 생성 */
@@ -264,6 +280,8 @@ ALTER TABLE "COMMENT" ADD CONSTRAINT "PK_COMMENT" PRIMARY KEY (
 	"COMMENT_NO"
 );
 
+-- 4/28 전부 수행함
+
 -------------------- FK -------------------------
 
 
@@ -360,6 +378,8 @@ ALTER TABLE "COMMENT" ADD
 CONSTRAINT "COMMENT_DEL_CHECK"
 CHECK("COMMENT_DEL_FL" IN ('Y', 'N') );
 
+-- 4/28 수행함
+
 	
 	
 /* 게시판 종류(BOARD_TYPE) 추가 */
@@ -371,8 +391,17 @@ INSERT INTO "BOARD_TYPE" VALUES(SEQ_BOARD_CODE.NEXTVAL, '자유 게시판');
 
 COMMIT;
 
+SELECT * FROM "BOARD_TYPE";
+
+SELECT BOARD_CODE "boardCode", BOARD_NAME "boardName"
+FROM "BOARD_TYPE"
+ORDER BY BOARD_CODE;
+
+
 
 ---------------------------------------------
+
+SELECT * FROM "MEMBER";
 /* 게시글 번호 시퀀스 생성 */
 CREATE SEQUENCE SEQ_BOARD_NO NOCACHE; 
 
@@ -396,10 +425,15 @@ COMMIT;
 
 
 SELECT * FROM "BOARD";
+-- 4/28 수행함
+
+
+
+
 
 ---------------------------------------------------
 -- 부모 댓글 번호 NULL 허용
-
+SELECT * FROM MEMBER;
 
 /* 댓글 번호 시퀀스 생성 */
 CREATE SEQUENCE SEQ_COMMENT_NO NOCACHE;
@@ -422,6 +456,60 @@ BEGIN
 END;
 
 COMMIT;
+
+SELECT COUNT(*) FROM "COMMENT";
+
+
+-- 특정 게시판(BOARD_CODE)에 삭제되지 않은 게시글 목록 조회
+-- 단, 최신글이 제일 위에 존재하도록 조회
+-- 작성일 : 몇 초/몇 분/몇 시간 전 조회, 하루가 넘어가면 YYYY-MM-DD 형식 조회
+
+-- 게시글번호/제목[댓글개수]/작성자닉네임/작성일/조회수/좋아요 개수
+
+-- 상관 서브 쿼리
+-- 1) 메인쿼리 1행 조회
+-- 2) 1행 조회 결과를 이용해서 서브쿼리 수행
+--   메인쿼리 모두 이용될때까지 반복
+
+
+SELECT BOARD_NO, BOARD_TITLE, READ_COUNT, MEMBER_NICKNAME,
+(SELECT COUNT(*) 
+FROM "COMMENT" C 
+WHERE C.BOARD_NO = B.BOARD_NO) COMMENT_COUNT,
+
+(SELECT COUNT(*)
+FROM "BOARD_LIKE" L
+WHERE L.BOARD_NO = B.BOARD_NO) LIKE_COUNT,
+
+CASE 
+	WHEN SYSDATE - BOARD_WRITE_DATE < 1 / 24 / 60
+	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) * 24 * 60 * 60) || '초 전'
+	
+	WHEN SYSDATE - BOARD_WRITE_DATE < 1 / 24
+	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) * 24 * 60) || '분 전'
+	
+	WHEN SYSDATE - BOARD_WRITE_DATE < 1 
+	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) * 24) || '시간 전'
+ELSE TO_CHAR(BOARD_WRITE_DATE, 'YYYY-MM-DD')
+END BOARD_WRITE_DATE
+
+
+FROM "BOARD" B
+JOIN "MEMBER" M ON(B.MEMBER_NO = M.MEMBER_NO)
+WHERE BOARD_DEL_FL = 'N'
+AND BOARD_CODE = 1
+ORDER BY BOARD_NO DESC;
+
+
+
+
+
+
+
+
+
+
+
 
 -----------------------------------------------------
 
