@@ -1,5 +1,6 @@
 package edu.kh.project.board.controller;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -193,8 +194,16 @@ public class BoardController {
 													.withMinute(0)
 													.withSecond(0)
 													.withNano(0);
+					
+					// 현재시간부터 다음날 자정까지 남은 시간 계산 (초단위)
+					long seconds = Duration.between(now, nextDayMidnight).getSeconds();
+					
+					// 쿠키 수명 설정
+					c.setMaxAge((int)seconds);
+					
+					resp.addCookie(c); // 응답 객체를 이용해서 클라이언트에게 쿠키 전달
+					
 				}
-				
 				
 			}
 				
