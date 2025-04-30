@@ -111,13 +111,28 @@ public class BoardServiceImpl implements BoardService{
 		}
 		
 		
+		// 3. 다시 해당 게시글의 좋아요 개수를 조회해서 반환
+		if(result > 0) {
+			return mapper.selectLikeCount(map.get("boardNo"));
+		}
 		
-		
-		
-		
-		
-		return 0;
+		return -1; // 좋아요 처리 실패
 	}
 	
+	// 조회 수 1 증가 서비스
+	@Override
+	public int updateReadCount(int boardNo) {
+		
+		// 1. 조회 수 1 증가 (UPDATE) 
+		int result = mapper.updateReadCount(boardNo);
+		
+		// 2. 현재 조회 수 조회
+		if(result > 0) {
+			return mapper.selectReadCount(boardNo);
+		}
+		
+		// 실패한 경우 -1 반환
+		return -1;
+	}
 	
 }
