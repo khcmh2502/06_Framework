@@ -209,6 +209,64 @@
 		WHERE BOARD_NO = #{boardNo}
 	</select>
 	
+	<!--  
+		동적 SQL : <choose> <when> <otherwise>
+	
+		<choose> : 조건문을 작성할 영역 지정
+		 	내부에 <when> <otherwise> 태그 작성 가능
+		 	
+		<when> : if, else if 역할의 태그
+			-	test 속성 : 조건식 작성하는 속성
+			
+		<otherwise> : else 역할의 태그
+	
+	 -->
+	
+	<!-- 검색 조건이 맞는 게시글 수 조회 -->
+	<select id="getSearchCount">
+		SELECT COUNT(*)
+		FROM "BOARD"
+		
+		<!-- 작성자 검색인 경우 -->
+		<if test='key == "w"'>
+			JOIN "MEMBER" USING(MEMBER_NO)
+		</if>
+		
+		WHERE BOARD_DEL_FL = 'N'
+		AND BOARD_CODE = #{boardCode}
+		
+		<choose>
+			<!-- 제목 검색 (key 값 "t" 인 경우) -->
+			<when test='key == "t"'>
+				AND BOARD_TITLE LIKE '%'|| #{query} ||'%'
+			</when>
+			
+			<!-- 내용 검색 (key 값 "c" 인 경우) -->
+			<when test='key == "c"'>
+				AND BOARD_CONTENT LIKE '%'|| #{query} ||'%'
+			</when>
+			
+			<!-- 제목 + 내용 검색 (key 값 "tc" 인 경우) -->
+			<when test='key == "tc"'>
+				AND (
+					BOARD_TITLE LIKE '%'|| #{query} ||'%'
+					OR
+					BOARD_CONTENT LIKE '%'|| #{query} ||'%'
+				)
+			</when>
+			
+			<!-- 작성자 검색 (key 값 "w" 인 경우) -->
+			<otherwise>
+				AND MEMBER_NICKNAME LIKE '%'|| #{query} ||'%'
+			</otherwise>
+			
+		</choose>
+		
+	
+	</select>
+	
+	
+	
 </mapper>
 
 
