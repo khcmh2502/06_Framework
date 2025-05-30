@@ -39,15 +39,15 @@ CREATE SEQUENCE SEQ_MEMBER_NO NOCACHE;
 -- 샘플 회원 데이터 삽입
 INSERT INTO "MEMBER"
 VALUES(SEQ_MEMBER_NO.NEXTVAL, 
-			 'user02@kh.or.kr',
+			 'admin01@kh.or.kr',
 			 '$2a$10$SC0KYLzAdtkZT12h5wTWT.csuiG.boiRC4ct6Mioe5puIo4W7GZmW',
-			 '유저둘',
+			 '김관리',
 			 '01022222222',
 			 '01234^^^서울시 중구 남대문로 120^^^3층, E강의장',
 			 NULL,
 			 DEFAULT,
 			 DEFAULT,
-			 DEFAULT
+			 2
 );
 
 COMMIT;
@@ -59,7 +59,9 @@ SELECT * FROM "MEMBER";
 -- 암호화된 비밀번호(평문 : pass01!) 업데이트
 UPDATE "MEMBER" SET
 MEMBER_PW = '$2a$10$SC0KYLzAdtkZT12h5wTWT.csuiG.boiRC4ct6Mioe5puIo4W7GZmW'
-WHERE MEMBER_NO = 1;
+WHERE MEMBER_NO = 3;
+
+
 
 COMMIT;
 
@@ -879,3 +881,12 @@ ALTER TABLE "REFRESH_TOKEN" ADD CONSTRAINT "FK_MEMBER_TO_REFRESH_TOKEN_1" FOREIG
 REFERENCES "MEMBER" (
 	"MEMBER_NO"
 );
+
+-----------------------------------------
+
+
+
+
+
+
+

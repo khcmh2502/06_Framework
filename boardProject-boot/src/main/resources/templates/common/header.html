@@ -57,6 +57,9 @@
         <a href="#">자유게시판</a>
       </li>
        -->
+	   <!-- Application scope는 자동 검색되지 않음 
+			직접 명시하여 application 스코프에있는 boardTypeList를 찾아야함
+	 -->
       <th:block th:each="boardType : ${application.boardTypeList}">
         <li>
           <a th:text="${boardType.boardName}"

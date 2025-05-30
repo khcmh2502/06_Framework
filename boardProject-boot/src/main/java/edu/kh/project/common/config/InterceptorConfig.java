@@ -32,7 +32,8 @@ public class InterceptorConfig implements WebMvcConfigurer{
 							"/favicon.ico"); // 가로채지 않을 주소를 지정
 					
 	
-		
-		
+		WebMvcConfigurer.super.addInterceptors(registry); // WebMvcConfigurer 인터페이스의 기본 구현(디폴트 메서드)를 호출
+		// 내가 WebMvcConfigurer를 구현한 클래스이고, 부모 인터페이스의 기본 로직도 같이 실행하고 싶을 때
+		// 없어도됨(오히려 없는게 가독성에 좋음)
 	}
 }

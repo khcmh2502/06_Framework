@@ -46,7 +46,9 @@ public class Board {
 	private int likeCheck;
 	
 	
-	
+	// 관리자페이지에서 필요
+	// 게시판 종류명
+	private String boardName;
 	
 	
 	
