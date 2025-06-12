@@ -40,9 +40,9 @@ public class WebSocketConfig implements WebSocketConfigurer{
 		//						"http://127.0.0.1/",
 		//						"http://192.168.50.229/")
 		.setAllowedOriginPatterns("https://cmh-boardproject.store", 
-				"https://www.cmh-boardproject.store");
+				"https://www.cmh-boardproject.store")
 		// 웹소켓 요청이 허용되는 ip/도메인 지정
-		//.withSockJS(); // SockJS 지원
+		.withSockJS(); // SockJS 지원
 		
 		// ------------------------------------------------------
 		
@@ -53,8 +53,8 @@ public class WebSocketConfig implements WebSocketConfigurer{
 		// 						"http://127.0.0.1/",
 		// 						"http://192.168.50.229/")
 		.setAllowedOriginPatterns("https://cmh-boardproject.store", 
-				"https://www.cmh-boardproject.store");
-		//.withSockJS();
+				"https://www.cmh-boardproject.store")
+		.withSockJS();
 		
 	}
 }

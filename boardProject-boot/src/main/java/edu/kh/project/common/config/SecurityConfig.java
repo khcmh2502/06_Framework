@@ -22,29 +22,26 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
-	@Bean 
+
+	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
-	
+
 	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(auth -> 
+			auth.requestMatchers("/admin/**").authenticated() // JWT 토큰 방식 이용시 참고
+				.requestMatchers("/testSock/**","/chattingSock/**").permitAll() // 누구나 접근 가능
+				.anyRequest().permitAll()) // 그 외 모든 요청도 permitAll
+				.csrf(csrf -> csrf.ignoringRequestMatchers(
+						// CSRF 보호를 기본적으로 활성화하되,
+						// /testSock/**와 /chattingSock/** 경로는 CSRF 검사를 무시(비활성화)
+						new AntPathRequestMatcher("/testSock/**"),
+		                new AntPathRequestMatcher("/chattingSock/**"))
+						);
 
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(
-                    new AntPathRequestMatcher("/chattingSock/**"),
-                    new AntPathRequestMatcher("/testSock/**") // 웹소켓 경로 허용
-                ).permitAll()
-                .anyRequest().permitAll() // 나머지 경로도 우선 허용
-            );
-            //.csrf(csrf -> csrf.disable()); // CSRF 비활성화(웹소켓은 CSRF 보호 비활성화 필요)
+		return http.build();
+	}
 
-        return http.build();
-    }
-    
-	
-	
 }

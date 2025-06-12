@@ -351,8 +351,8 @@ function selectChattingFn() {
 let chattingSock;
 
 if(loginMemberNo != ""){
-//	chattingSock = new SockJS("/chattingSock");
-	chattingSock = new WebSocket("wss://cmh-boardproject.store/chattingSock");
+	chattingSock = new SockJS("/chattingSock");
+//	chattingSock = new WebSocket("wss://cmh-boardproject.store/chattingSock");
 }
 
 
