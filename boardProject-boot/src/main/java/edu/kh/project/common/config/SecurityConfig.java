@@ -28,6 +28,8 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
+	
+	
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -37,11 +39,12 @@ public class SecurityConfig {
                     new AntPathRequestMatcher("/testSock/**") // 웹소켓 경로 허용
                 ).permitAll()
                 .anyRequest().permitAll() // 나머지 경로도 우선 허용
-            )
-            .csrf(csrf -> csrf.disable()); // CSRF 비활성화(웹소켓은 CSRF 보호 비활성화 필요)
+            );
+            //.csrf(csrf -> csrf.disable()); // CSRF 비활성화(웹소켓은 CSRF 보호 비활성화 필요)
 
         return http.build();
     }
+    
 	
 	
 }
