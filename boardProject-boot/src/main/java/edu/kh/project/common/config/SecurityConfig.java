@@ -38,7 +38,6 @@ public class SecurityConfig {
 				.anyRequest().permitAll()) // 그 외 모든 요청도 permitAll
 				.csrf(csrf -> csrf
 				    .requireCsrfProtectionMatcher(new CsrfProtectionMatcher())
-				    // /auth/** 와 /admin/** 제외한 나머지 제외 (CSRF 검사 X)
 				);
 
 		return http.build();
