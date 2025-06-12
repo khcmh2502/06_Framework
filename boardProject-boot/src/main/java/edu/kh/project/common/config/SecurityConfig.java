@@ -32,13 +32,17 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> 
-			auth.requestMatchers("/admin/**").authenticated() // JWT 토큰 방식 이용시 참고
-				.requestMatchers("/testSock/**","/chattingSock/**").permitAll() // 누구나 접근 가능
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/admin/**").authenticated() // JWT 토큰 방식 이용시 참고
+				.requestMatchers("/testSock/**", "/chattingSock/**").permitAll() // 누구나 접근 가능
 				.anyRequest().permitAll()) // 그 외 모든 요청도 permitAll
-				.csrf(csrf -> csrf
-				    .requireCsrfProtectionMatcher(new CsrfProtectionMatcher())
-				);
+				.csrf(csrf -> csrf.requireCsrfProtectionMatcher(new CsrfProtectionMatcher()));
+
+		// X-Frame-Options 설정을 위한 코드 추가
+		http.headers(headers -> headers.frameOptions(frameOptions -> 
+			frameOptions.sameOrigin() // 'deny' 대신 'sameOrigin' 정책을 사용
+			// 외부 사이트에서 우리 페이지를 iframe으로 가져가는 것은 막되, 
+			// 같은 도메인 내(ex. cmh-boardproject.store)에서는 iframe 사용을 허용하는 정책
+		));
 
 		return http.build();
 	}
