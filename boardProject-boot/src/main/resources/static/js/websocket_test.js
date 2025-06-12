@@ -5,7 +5,8 @@
 
 // 2. SockJS 객체를 생성
 // http://localhost(또는 ip)
-const testSock = new SockJS("/testSock");
+const testSock = new WebSocket("wss://cmh-boardproject.store/testSock");
+//const testSock = new SockJS("/testSock");
 // ws://localhost(또는 ip)/testSock
 
 // 3. 생성된 SockJS 객체를 이용해서 메시지 전달
