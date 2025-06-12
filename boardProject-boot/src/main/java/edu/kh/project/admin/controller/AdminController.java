@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173" /* , allowCredentials = "true" */)
+@CrossOrigin(origins = "https://cmh-boardproject.store", allowCredentials = "true")
 //	, allowCredentials = "true" 클라이언트로부터 들어오는 쿠키 허용
 @RequestMapping("admin")
 @Slf4j

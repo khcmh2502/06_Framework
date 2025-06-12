@@ -36,9 +36,10 @@ public class WebSocketConfig implements WebSocketConfigurer{
 		.addInterceptors(handshakeInterceptor)
 		// 클라이언트 연결 시 HttpSession을 가로채 핸들러에게 
 		//	전달하는 handshakeInterceptor 등록
-		.setAllowedOriginPatterns("http://localhost/", 
-								"http://127.0.0.1/",
-								"http://192.168.50.229/")
+		//.setAllowedOriginPatterns("http://localhost/", 
+		//						"http://127.0.0.1/",
+		//						"http://192.168.50.229/")
+		.setAllowedOriginPatterns("https://cmh-boardproject.store/", "https://www.cmh-boardproject.store/")
 		// 웹소켓 요청이 허용되는 ip/도메인 지정
 		.withSockJS(); // SockJS 지원
 		
@@ -47,9 +48,10 @@ public class WebSocketConfig implements WebSocketConfigurer{
 		registry
 		.addHandler(chattingWebsocketHandler, "/chattingSock")
 		.addInterceptors(handshakeInterceptor)
-		.setAllowedOriginPatterns("http://localhost/", 
-								"http://127.0.0.1/",
-								"http://192.168.50.229/")
+		// .setAllowedOriginPatterns("http://localhost/", 
+		// 						"http://127.0.0.1/",
+		// 						"http://192.168.50.229/")
+		.setAllowedOriginPatterns("https://cmh-boardproject.store/", "https://www.cmh-boardproject.store/")
 		.withSockJS();
 		
 	}
