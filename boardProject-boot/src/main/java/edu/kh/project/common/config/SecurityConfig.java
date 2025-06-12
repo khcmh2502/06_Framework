@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import edu.kh.project.common.security.CsrfProtectionMatcher;
+
 /*
  * @Configuration
  * - 해당 클래스가 설정용 클래스임을 명시
@@ -34,12 +36,10 @@ public class SecurityConfig {
 			auth.requestMatchers("/admin/**").authenticated() // JWT 토큰 방식 이용시 참고
 				.requestMatchers("/testSock/**","/chattingSock/**").permitAll() // 누구나 접근 가능
 				.anyRequest().permitAll()) // 그 외 모든 요청도 permitAll
-				.csrf(csrf -> csrf.ignoringRequestMatchers(
-						// CSRF 보호를 기본적으로 활성화하되,
-						// /testSock/**와 /chattingSock/** 경로는 CSRF 검사를 무시(비활성화)
-						new AntPathRequestMatcher("/testSock/**"),
-		                new AntPathRequestMatcher("/chattingSock/**"))
-						);
+				.csrf(csrf -> csrf
+				    .requireCsrfProtectionMatcher(new CsrfProtectionMatcher())
+				    // /auth/** 와 /admin/** 제외한 나머지 제외 (CSRF 검사 X)
+				);
 
 		return http.build();
 	}
