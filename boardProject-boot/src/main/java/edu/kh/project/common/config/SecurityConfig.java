@@ -51,7 +51,11 @@ public class SecurityConfig {
 		// CSRF(Cross-Site Request Forgery) 보호 설정
 		// CSRF 보호를 활성화하고, 특정 요청에 대해 보호를 적용하는 Matcher를 지정
 		// form 기반 인증 시 CSRF 토큰을 사용하여 요청의 위변조를 방지
+		
+		// 로그인 요청은 CSRF 제외
+		.csrf(csrf -> csrf.ignoringRequestMatchers("/admin/login"))
 		.csrf(csrf -> csrf.requireCsrfProtectionMatcher(new CsrfProtectionMatcher()))
+		
 		// X-Frame-Options 헤더 설정
 		// 'deny' 대신 'sameOrigin' 정책을 사용Add commentMore actions
 		// 외부 사이트에서 우리 페이지를 iframe으로 가져가는 것은 막되,
