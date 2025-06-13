@@ -69,7 +69,8 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // 자격 증명(쿠키, HTTP 인증 등) 허용 여부
-        config.addAllowedOriginPattern("*"); // 모든 Origin 허용
+        config.addAllowedOrigin("https://cmh-board-admin.vercel.app"); 
+											// React 애플리케이션 도메인
         config.addAllowedHeader("*"); // 모든 헤더 허용
         config.addAllowedMethod("*"); // 모든 HTTP 메서드 (GET, POST, PUT, DELETE 등) 허용
         source.registerCorsConfiguration("/**", config); // 모든 경로에 대해 위 CORS 설정 적용
