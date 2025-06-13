@@ -87,6 +87,12 @@ public class AdminServiceImpl implements AdminService {
 		return mapper.restoreBoard(boardNo);
 	}
 	
+	// 관리자 계정 목록 조회
+	@Override
+	public List<Member> adminAccountList() {
+		return mapper.adminAccountList();
+	}
+	
 	// 관리자 이메일 중복 여부 검사
 	@Override
 	public int checkEmail(String memberEmail) {

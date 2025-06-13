@@ -230,6 +230,21 @@ public class AdminController {
 		}
 	}
 	
+	/**
+	 * 관리자 계정 목록 조회
+	 * 
+	 * @return
+	 */
+	@GetMapping("adminAccountList")
+	public ResponseEntity<Object> adminAccountList() {
+		try {
+			List<Member> adminList = service.adminAccountList();
+			return ResponseEntity.status(HttpStatus.OK).body(adminList);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 	
 	/** 관리자 계정 발급
 	 * @param member

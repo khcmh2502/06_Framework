@@ -54,6 +54,12 @@ public interface AdminService {
 	 * @return
 	 */
 	int restoreBoard(int boardNo);
+	
+	/** 관리자 계정 목록 조회
+	 * @return
+	 */
+	List<Member> adminAccountList();
+	
 
 	/** 관리자 이메일이 중복 여부 검사
 	 * @param memberEmail
