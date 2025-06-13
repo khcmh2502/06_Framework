@@ -22,9 +22,13 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RestController
-@CrossOrigin(origins = "https://cmh-board-admin.vercel.app", allowCredentials = "true")
+// @CrossOrigin은 컨트롤러 레벨만 적용됨 
+// preflight(OPTIONS)는 Security가 먼저 처리하므로 CrossOrigin으로는 불충분
+// preflight : 브라우저가 서버에 보내는 사전 요청(보안상 민감하거나 변경 위험이 있는 요청인지 판단하기 위해)
+// -> WebConfig 클래스 만들어서 처리
+// @CrossOrigin(origins = "https://cmh-board-admin.vercel.app", allowCredentials = "true")
 //	, allowCredentials = "true" 클라이언트로부터 들어오는 쿠키 허용
+@RestController
 @RequestMapping("admin")
 @Slf4j
 @RequiredArgsConstructor
