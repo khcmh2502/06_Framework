@@ -40,22 +40,19 @@ public class SecurityConfig {
 		// CORS(Cross-Origin Resource Sharing) 설정
 		// 다른 도메인으로부터의 요청을 허용할지 여부를 결정함.
 		.cors(cors -> cors.configurationSource(corsConfigurationSource())).authorizeHttpRequests(auth -> auth
-		// '/admin/login' 경로는 인증 없이 누구나 접근 가능하도록 설정(인증 전 이므로)
-		.requestMatchers("/admin/login").permitAll()
-		// "/admin/**" 경로의 요청은 인증된 사용자만 접근 가능. (ex. JWT 토큰 등을 통해 인증)
-		.requestMatchers("/admin/**").authenticated()
-		// "/testSock/**", "/chattingSock/**" 경로의 요청은 누구나 접근 가능.
-		.requestMatchers("/testSock/**", "/chattingSock/**").permitAll()
+		//.requestMatchers("/admin/login").permitAll() //'/admin/login' 경로는 인증 없이 누구나 접근 가능하도록 설정(인증 전 이므로)
+		//.requestMatchers("/admin/**").authenticated() // "/admin/**" 경로의 요청은 인증된 사용자만 접근 가능. (ex. JWT 토큰 등을 통해 인증)
+		.requestMatchers("/admin/**").permitAll() // JWT 토큰 인증 지금은 안하므로 모든 요청 접근 가능으로 변경
+		.requestMatchers("/testSock/**", "/chattingSock/**").permitAll() // websocket : "/testSock/**", "/chattingSock/**" 경로의 요청은 누구나 접근 가능.
 		// 위에서 정의되지 않은 그 외 모든 요청은 누구나 접근 가능.
 		.anyRequest().permitAll())
 		// CSRF(Cross-Site Request Forgery) 보호 설정
 		// CSRF 보호를 활성화하고, 특정 요청에 대해 보호를 적용하는 Matcher를 지정
 		// form 기반 인증 시 CSRF 토큰을 사용하여 요청의 위변조를 방지
-		// 로그인 요청은 CSRF 제외
-		//.csrf(csrf -> csrf.ignoringRequestMatchers("/admin/login"))
+		
+		//.csrf(csrf -> csrf.ignoringRequestMatchers("/admin/login")) // 로그인 요청은 CSRF 제외
 		//.csrf(csrf -> csrf.requireCsrfProtectionMatcher(new CsrfProtectionMatcher()))
-		// JWT 토큰 인증 방식(HttpOnly 쿠키 사용 X) 아닐경우 CSRF 비활성화
-		.csrf(csrf -> csrf.disable())
+		.csrf(csrf -> csrf.disable()) // JWT 토큰 인증 방식(HttpOnly 쿠키 사용 X) 아닐경우 CSRF 비활성화
 		
 		// X-Frame-Options 헤더 설정
 		// 'deny' 대신 'sameOrigin' 정책을 사용Add commentMore actions
