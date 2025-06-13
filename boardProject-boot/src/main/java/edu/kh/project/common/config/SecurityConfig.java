@@ -31,7 +31,7 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	// Admin API 요청에만 적용되는 필터 체인
+	// Admin API 요청에만 적용되는 필터 체인(JWT 기반 인증이 필요한 관리자 전용 API 보호)
 	@Bean
 	@Order(1) // 우선순위 설정 (숫자가 낮을수록 먼저 적용됨)
 	public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
